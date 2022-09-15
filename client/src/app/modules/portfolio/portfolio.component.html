@@ -1,0 +1,48 @@
+<div class="p-4">
+    <ngb-accordion #a="ngbAccordion" activeIds="custom-panel-1">
+        <ngb-panel id="custom-panel-1">
+            <ng-template ngbPanelHeader let-opened="opened">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h3 class="m-0 font-weight-bold">Portfolio
+                    </h3>
+                </div>
+            </ng-template>
+            <ng-template ngbPanelContent>
+                <ng-container *ngIf="assets && assets.length; else noResult">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Token Name</th>
+                                <th scope="col">Token Symbol</th>
+                                <th scope="col">Number Of Tokens</th>
+                                <th scope="col">Invested Date</th>
+                                <th scope="col">Rate Of Interest</th>
+                                <th scope="col">History of Transactions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let asset of assets">
+                                <tr *ngFor="let investor of asset.investorReceiverWalletAddress">
+                                    <ng-container *ngIf="investor.userId == auth.getCurrentUser()?.user?._id">
+                                        <td>{{asset.tokenName}}</td>
+                                        <td>{{asset.tokenSymbol}}</td>
+                                        <td>{{investor.purchasedTokens}}</td>
+                                        <td>{{investor.investedDate | dateAgo}}</td>
+                                        <td>{{asset.rateOfInterest}}</td>
+                                        <td><button mat-button color="primary"
+                                                (click)="openUrl(investor?.investorWalletAddress)">View</button></td>
+                                    </ng-container>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </ng-container>
+                <ng-template #noResult>
+                    <div class="col text-center">
+                        <h2>No Results Found</h2>
+                    </div>
+                </ng-template>
+            </ng-template>
+        </ngb-panel>
+    </ngb-accordion>
+</div>

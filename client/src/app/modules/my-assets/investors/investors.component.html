@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>Investors</h2>
+<mat-dialog-content>
+    <ng-container *ngIf="asset?.investorReceiverWalletAddress.length; else noResult">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <!-- <th scope="col">Investor Id</th> -->
+                    <th scope="col">Investor Wallet Address</th>
+                    <th scope="col">Purchased Tokens</th>
+                    <th scope="col">Rate Of Interest</th>
+                    <th scope="col">Invested Date</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let investor of asset?.investorReceiverWalletAddress  | paginate: {id: 'foo', itemsPerPage: 4, currentPage: c }">
+                    <!-- <td>{{investor._id}}</td> -->
+                    <td>{{investor.investorWalletAddress}}</td>
+                    <td>{{investor.purchasedTokens}}</td>
+                    <td> <span class="badge badge-success font-weight-bold">{{asset.rateOfInterest}}%</span></td>
+                    <td>{{investor.investedDate | dateAgo}}</td>
+                    <td><button class="btn btn-success btn-sm" [mat-dialog-close]="{investor:investor,asset:asset}">Pay
+                            Back</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </ng-container>
+    <div class="text-right" *ngIf="asset?.investorReceiverWalletAddress.length;">
+        <pagination-controls id="foo" (pageChange)="c = $event"></pagination-controls>
+    </div>
+    <ng-template #noResult>
+        <div class="col text-center">
+            <h4>No Results Found</h4>
+        </div>
+    </ng-template>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

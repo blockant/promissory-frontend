@@ -1,0 +1,49 @@
+<ngb-accordion #a="ngbAccordion" activeIds="custom-panel-1">
+    <ngb-panel id="custom-panel-1">
+        <ng-template ngbPanelHeader let-opened="opened">
+            <div class="d-flex align-items-center justify-content-between">
+                <h3 class="m-0 font-weight-bold">Users
+                </h3>
+                <div>
+                    <button class="btn btn-sm btn-warning" (click)="openDialog()">Create User</button>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template ngbPanelContent>
+            <ng-container *ngIf="users && users.length; else noResult">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Owner Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of users; index as i">
+                            <th scope="row">{{ i + 1 }}</th>
+                            <td>{{ user.firstName }}</td>
+                            <td>{{ user.lastName }}</td>
+                            <td>{{ user.email }}</td>
+                            <td><span class="badge"
+                                [ngClass]="{ 
+                                    'badge-primary':user.role == 'Owner',
+                                    'badge-success':user.role  == 'Promissory',
+                                    'badge-warning':user.role  == 'Investor',
+                                    'badge-danger':user.role  == 'SA'}">{{ user.role }}</span></td>
+                            <td>{{ user.ownerAddress }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ng-container>
+            <ng-template #noResult>
+                <div class="col text-center">
+                    <h2>No Results Found</h2>
+                </div>
+            </ng-template>
+        </ng-template>
+    </ngb-panel>
+</ngb-accordion>

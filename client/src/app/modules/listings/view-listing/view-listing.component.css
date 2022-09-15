@@ -1,0 +1,20 @@
+/* ngb-carousel .picsum-img-wrapper>img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  } */
+.card .card-header {
+    background-color: #0c88e7 !important;
+    color: #fff !important;
+}
+
+ngb-carousel .picsum-img-wrapper {
+    text-align: center;
+}
+
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
+    filter: invert(1);
+}

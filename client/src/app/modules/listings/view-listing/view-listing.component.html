@@ -1,0 +1,63 @@
+<ngb-accordion #a="ngbAccordion" activeIds="custom-panel-1">
+  <ngb-panel id="custom-panel-1">
+    <ng-template ngbPanelHeader let-opened="opened">
+      <div class="d-flex align-items-center justify-content-between">
+        <h3 class="m-0 font-weight-bold">{{asset.street}}, {{asset.city}},
+          {{asset.state}} {{asset.zipcode}}
+        </h3>
+        <div *ngIf="asset?.assetStatus == 'tokenized'">
+          <button class="btn btn-sm btn-light ml-2" (click)="openUrl(asset?.contractAddress)">View Smart Contracts</button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      <ngb-carousel #carousel [interval]="3000" [pauseOnHover]="pauseOnHover" [pauseOnFocus]="pauseOnFocus"
+        (slide)="onSlide($event)">
+        <ng-template ngbSlide *ngFor="let img of images; index as i">
+          <div class="carousel-caption">
+            <h3>My slide {{i + 1}} title</h3>
+          </div>
+          <a href="https://www.google.fr/?q=Number+{{i+1}}" target="_blank" rel="nofollow noopener noreferrer">
+            <div class="picsum-img-wrapper">
+              <img [src]="img" alt="My image {{i + 1}} description" class="img-fluid">
+            </div>
+          </a>
+        </ng-template>
+      </ngb-carousel>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>
+<br>
+
+<div class="pl-3 pr-3">
+  <ngb-accordion #a="ngbAccordion" activeIds="custom-panel-2">
+    <ngb-panel id="custom-panel-2">
+      <ng-template ngbPanelHeader let-opened="opened">
+        <div class="d-flex align-items-center justify-content-between">
+          <h2 class="m-0 font-weight-bold">Property Details
+          </h2>
+        </div>
+      </ng-template>
+      <ng-template ngbPanelContent>
+        <app-property-details></app-property-details>
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
+</div>
+<br>
+<div class="pl-3 pr-3">
+<ngb-accordion #a="ngbAccordion" activeIds="custom-panel-3">
+  <ngb-panel id="custom-panel-3">
+    <ng-template ngbPanelHeader let-opened="opened">
+      <div class="d-flex align-items-center justify-content-between">
+        <h2 class="m-0 font-weight-bold">About the Property
+        </h2>
+      </div>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      <app-property-address [asset]="asset"></app-property-address>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>
+</div>
+

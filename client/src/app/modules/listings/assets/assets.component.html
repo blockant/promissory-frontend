@@ -1,0 +1,346 @@
+<div class="row">
+    <ng-container *ngIf="assets && assets.length; else noRecords">
+        <!-- <p-carousel [value]="assets" [numVisible]="4" [numScroll]="4" [circular]="false"
+        [responsiveOptions]="responsiveOptions">
+        <ng-template let-asset pTemplate="item"> -->
+        <div class="col-md-3 mb-2" *ngFor="let asset of assets;let i=index">
+            <div class="card shadow-lg p-2 mb-2 bg-white rounded hvr-hang h-100 w-100"
+            [style.border-color]="listingService.getC(asset.assetStatus,asset.soldout)">
+                <img class="card-img-top" src="assets/images/default.png" alt="Card image cap">
+                <div class="card-body p-0">
+                    <h4 class="card-title mb-1 text-center font-weight-bold">{{asset.street}}, {{asset.city}},
+                        {{asset.state}} {{asset.zipcode}}</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center p-1" [ngClass]="{ 
+                        'list-group-item-secondary':asset.assetStatus == 'pending',
+                        'list-group-item-success':asset.assetStatus  == 'approved',
+                        'list-group-item-primary':asset.assetStatus  == 'tokenized',
+                        'list-group-item-danger':asset.soldout == true}">
+                            Total Price
+                            <span class="font-weight-bold">{{asset.totalPrice | currency}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center
+                      p-1 text-dark">
+                            Token Price
+                            <span class="font-weight-bold">{{asset.tokenPrice | currency}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center
+                      p-1 text-dark">
+                            Rate Of Interest
+                            <span class="badge badge-success font-weight-bold">{{asset.rateOfInterest}}%</span>
+                        </li>
+                        <!-- <li class="list-group-item d-flex justify-content-between align-items-center
+                    p-1 text-dark">
+                            Compounded Interest
+                            <span class="font-weight-bold">{{asset.compoundedInterest | currency}}</span>
+                        </li> -->
+                        <li class="list-group-item d-flex justify-content-between align-items-center
+                   p-1 text-dark">
+                            Interest Earnings
+                            <span class="font-weight-bold">{{asset.interestEarnings | currency}}/Yearly</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center
+                            p-1 text-dark">
+                            Status
+                            <span class="badge font-weight-bold" [ngClass]="{ 
+                                'badge-secondary':asset.assetStatus == 'pending',
+                                'badge-success':asset.assetStatus  == 'approved',
+                                'badge-primary':asset.assetStatus  == 'tokenized'}">{{asset.assetStatus |
+                                uppercase}}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center
+                        p-1 text-dark">
+                            Created At
+                            <span class="font-weight-bold">{{asset.createdAt | dateAgo}}</span>
+                        </li>
+                    </ul>
+                    <ng-container *ngIf="auth.getCurrentUser()?.user?.role == 'Promissory'">
+                        <ng-container [ngSwitch]="asset.assetStatus">
+                            <ng-container *ngSwitchCase="'pending'">
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn btn-sm btn-warning btn-block mt-2" type="button"
+                                            [routerLink]="['view',asset._id]">View</button>
+                                    </div>
+                                    <div class="col">
+                                        <a role="button" class="btn btn-block btn-success btn-sm mt-2"
+                                            (click)="updateAsset(asset._id,{assetStatus:'approved'})">Approve</a>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'approved'">
+                                <div class="row">
+                                    <div class="col">
+                                        <a role="button" class="btn btn-block btn-primary btn-sm mt-2"
+                                            (click)="open(generate,asset,'generate')">Generate
+                                            Token</a>
+                                    </div>
+                                    <div class="col">
+                                        <button class="btn btn-sm btn-warning btn-block mt-2" type="button"
+                                            [routerLink]="['view',asset._id]">View</button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'tokenized'">
+                                <div class="row">
+                                    <div class="col" *ngIf="!asset?.ownerTranferStatus; else transferred">
+                                        <a role="button" class="btn btn-success btn-block btn-sm mt-2"
+                                            (click)="open(transfer,asset,'transfer')">Tranfer</a>
+                                    </div>
+                                    <ng-template #transferred>
+                                        <div class="col">
+                                            <a role="button"
+                                                class="btn btn-danger btn-block btn-sm mt-2">Transferred</a>
+                                        </div>
+                                    </ng-template>
+                                    <div class="col">
+                                        <button class="btn btn-sm btn-block btn-warning  mt-2" type="button"
+                                            [routerLink]="['view',asset._id]">View</button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="auth.getCurrentUser()?.user?.role == 'SA'">
+                        <ng-container [ngSwitch]="asset.assetStatus">
+                            <ng-container *ngSwitchCase="'pending'">
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn btn-sm btn-warning btn-block mt-2" type="button"
+                                            [routerLink]="['view',asset._id]">View</button>
+                                    </div>
+                                    <div class="col">
+                                        <a role="button" class="btn btn-block btn-danger btn-sm mt-2"
+                                            (click)="deleteAsset(asset._id)">Delete</a>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'approved'">
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn btn-sm btn-warning btn-block mt-2" type="button"
+                                            [routerLink]="['view',asset._id]">View</button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'tokenized'">
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn btn-sm btn-block btn-warning mt-2" type="button"
+                                            [routerLink]="['view',asset._id]">View</button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="auth.getCurrentUser()?.user?.role == 'Owner'">
+                        <ng-container [ngSwitch]="asset.assetStatus">
+                            <ng-container *ngSwitchCase="'pending'">
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn btn-sm btn-warning btn-block mt-2" type="button"
+                                            [routerLink]="['view',asset._id]">View</button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'tokenized'">
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn btn-sm btn-block btn-warning mt-2" type="button"
+                                            [routerLink]="['view',asset._id]">View</button>
+                                    </div>
+                                    <div class="col"
+                                        *ngIf="(asset?.ownerTranferStatus )&& (asset?.assetOwner != auth.getCurrentUser()?.user?._id) && !(asset.soldout) ">
+                                        <button class="btn btn-sm btn-block btn-success mt-2" type="button"
+                                            (click)="open(buy,asset,'buy')">Buy</button>
+                                    </div>
+                                    <div class="col" *ngIf="asset.soldout">
+                                        <button class="btn btn-sm btn-block btn-secondary mt-2" type="button">Sold
+                                            Out</button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'approved'">
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn btn-sm btn-warning btn-block mt-2" type="button"
+                                            [routerLink]="['view',asset._id]">View</button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="auth.getCurrentUser()?.user?.role == 'Investor'">
+                        <ng-container [ngSwitch]="asset.assetStatus">
+                            <ng-container *ngSwitchCase="'tokenized'">
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn btn-sm btn-block btn-warning mt-2" type="button"
+                                            [routerLink]="['view',asset._id]">View</button>
+                                    </div>
+                                    <div class="col" *ngIf="!asset.soldout">
+                                        <button class="btn btn-sm btn-block btn-success mt-2" type="button"
+                                            (click)="open(buy,asset,'buy')">Buy</button>
+                                    </div>
+                                    <div class="col" *ngIf="asset.soldout">
+                                        <button class="btn btn-sm btn-block btn-secondary mt-2" type="button">Sold
+                                            Out</button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+
+                </div>
+            </div>
+        </div>
+        <!-- </ng-template>
+        </p-carousel> -->
+    </ng-container>
+    <ng-template #noRecords>
+        <div class="col text-center m-5">
+            <h2>No Records Found</h2>
+        </div>
+    </ng-template>
+</div>
+<!-- generate modal -->
+<ng-template #generate let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title m-0" id="modal-basic-title">Generate Token</h4>
+        <button type="button" class="close" aria-label="Close" (click)="c('Close')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="generateForm">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputToken">Token Name</label>
+                    <input type="text" class="form-control form-control-sm" id="inputToken" placeholder="Token Name"
+                        formControlName="tokenName">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="tokenSupply">Token Supply</label>
+                    <input type="number" class="form-control form-control-sm" id="tokenSupply"
+                        placeholder="Token Supply" formControlName="tokenSupply">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="tokenSymbol">Token Symbol</label>
+                    <input type="text" class="form-control form-control-sm" id="tokenSymbol" placeholder="Token Symbol"
+                        formControlName="tokenSymbol">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="c('Save')"
+            [disabled]="!generateForm.valid">Generate</button>
+    </div>
+</ng-template>
+
+<!-- tranfer modal -->
+<ng-template #transfer let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title m-0" id="modal-basic-title">Tranfer Token</h4>
+        <button type="button" class="close" aria-label="Close" (click)="c('Close')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="transferForm">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="ownerWalletAddress">Owner Wallet Address</label>
+                    <input type="text" class="form-control form-control-sm" id="ownerWalletAddress"
+                        placeholder="Owner Wallet Address" formControlName="ownerWalletAddress">
+                        <div *ngIf="t.ownerWalletAddress.touched && t.ownerWalletAddress.errors" class="invalid-feedback d-block">
+                            <div *ngIf="t.ownerWalletAddress.errors.required">Wallet address is required</div>
+                            <div *ngIf="t.ownerWalletAddress.errors.minlength">invalid</div>
+                            <div *ngIf="t.ownerWalletAddress.errors.maxlength">invalid</div>
+                        </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="tokenSupply">Token Supply</label>
+                    <input type="text" class="form-control form-control-sm" id="tokenSupply" placeholder="Token Supply"
+                        formControlName="tokenSupply">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="c('Save')"
+            [disabled]="!transferForm.valid">Transfer</button>
+    </div>
+</ng-template>
+
+<!-- buy modal -->
+<ng-template #buy let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title m-0" id="modal-basic-title">Buy Tokens</h4>
+        <button type="button" class="close" aria-label="Close" (click)="c('Close')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="purchaseForm">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="numberOfTokensAvailable" class="text-success">Number Of Token Available</label>
+                    <input type="text" class="form-control form-control-sm" id="numberOfTokensAvailable"
+                        placeholder="NumberOf Tokens Available" formControlName="numberOfTokensAvailable">
+                </div>
+                <div class="form-group col-md-12">
+                    <label for="contractAddress">Contract Address</label>
+                    <input type="text" class="form-control form-control-sm" id="contractAddress"
+                        placeholder="Contract Address" formControlName="contractAddress">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="tokenName">Token Name</label>
+                    <input type="text" class="form-control form-control-sm" id="tokenName" placeholder="Token Name"
+                        formControlName="tokenName">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="tokenSupply">Token Supply</label>
+                    <input type="text" class="form-control form-control-sm" id="tokenSupply" placeholder="Token Supply"
+                        formControlName="tokenSupply">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="tokenSymbol">Token Symbol</label>
+                    <input type="text" class="form-control form-control-sm" id="tokenSymbol" placeholder="Token Symbol"
+                        formControlName="tokenSymbol">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="tokenPrice">Token Price</label>
+                    <input type="text" class="form-control form-control-sm" id="tokenPrice" placeholder="Token Price"
+                        formControlName="tokenPrice">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="numberOfTokensToBuy">Number Of Tokens To Buy</label>
+                    <input type="text" class="form-control form-control-sm" id="numberOfTokensToBuy"
+                        placeholder="Number Of Tokens To Buy" formControlName="numberOfTokensToBuy">
+                    <div *ngIf="f.numberOfTokensToBuy.touched && f.numberOfTokensToBuy.errors"
+                        class="invalid-feedback d-block">
+                        <div *ngIf="f.numberOfTokensToBuy.errors.required">field is required</div>
+                        <div *ngIf="f.numberOfTokensToBuy.errors.max">Number of tokens not more than token available
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="investorReceiverWalletAddress">Investor Receiver Wallet Address</label>
+                    <input type="text" class="form-control form-control-sm" id="investorReceiverWalletAddress"
+                        placeholder="Investor Receiver Wallet Address" formControlName="investorReceiverWalletAddress">
+                    <div *ngIf="f.investorReceiverWalletAddress.touched && f.investorReceiverWalletAddress.errors"
+                        class="invalid-feedback d-block">
+                        <div *ngIf="f.investorReceiverWalletAddress.errors.required">field is required</div>
+                        <div *ngIf="f.investorReceiverWalletAddress.errors.minlength">invalid</div>
+                        <div *ngIf="f.investorReceiverWalletAddress.errors.maxlength">invalid</div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-right btn-block col-5" (click)="c('Save')"
+            [disabled]="!purchaseForm.valid">Proceed</button>
+    </div>
+</ng-template>

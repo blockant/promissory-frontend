@@ -1,0 +1,37 @@
+    <ul ngbNav #nav="ngbNav" [(activeId)]="active" (navChange)="onNavChange($event)"
+        class="nav-tabs justify-content-center">
+        <li [ngbNavItem]="'myAssets'" *ngIf="auth.getCurrentUser()?.user?.role == 'Owner'">
+            <a ngbNavLink>My Assets</a>
+            <ng-template ngbNavContent>
+                <app-assets [assets]="assets" (onAsset)="getAssets('myAssets')" [viewType]="viewType"></app-assets>
+            </ng-template>
+        </li>
+        <ng-container *ngIf="auth.getCurrentUser()?.user?.role == 'Promissory' ||
+        auth.getCurrentUser()?.user?.role == 'SA'">
+            <li [ngbNavItem]="'pending'">
+                <a ngbNavLink>Approval Pending</a>
+                <ng-template ngbNavContent>
+                    <app-assets [assets]="assets" (onAsset)="getAssets('pending')" [viewType]="viewType"></app-assets>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="'approved'">
+                <a ngbNavLink>Aprroved Assets</a>
+                <ng-template ngbNavContent>
+                    <app-assets [assets]="assets" (onAsset)="getAssets('approved')" [viewType]="viewType"></app-assets>
+                </ng-template>
+            </li>
+        </ng-container>
+        <li [ngbNavItem]="'tokenized'">
+            <a ngbNavLink>Tokenized Assets</a>
+            <ng-template ngbNavContent>
+                <app-assets [assets]="assets" (onAsset)="getAssets('tokenized')" [viewType]="viewType"></app-assets>
+            </ng-template>
+        </li>
+        <li ngbNavItem class="ml-auto" *ngIf="auth.getCurrentUser()?.user?.role == 'SA'">
+            <button class="btn btn-sm btn-danger" (click)="openDialog()">Create Listing</button>&nbsp;
+            <button type="submit" class="btn btn-primary btn-sm" (click)="changeView()">
+                <i class="fa" [ngClass]="viewType == 'list' ? 'fa-th-list' : 'fa-list-ul'" aria-hidden="true"></i>
+            </button>
+        </li>
+    </ul>
+    <div [ngbNavOutlet]="nav" ></div>

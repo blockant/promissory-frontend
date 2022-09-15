@@ -1,0 +1,43 @@
+<main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
+    <div class="container">
+        <div class="card login-card">
+            <div class="row no-gutters">
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <div class="brand-wrapper">
+                            <img src="assets/images/logo.png" alt="logo" class="logo">
+                        </div>
+                        <p class="login-card-description">Sign into your account</p>
+                        <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm)">
+                            <div class="form-group">
+                                <label for="email" class="sr-only">Email</label>
+                                <input type="text" name="email" id="email" class="form-control"
+                                    placeholder="Enter Email" formControlName="email">
+                                <div *ngIf="f.email.touched && f.email.errors" class="invalid-feedback d-block">
+                                    <div *ngIf="f.email.errors.required">email is required</div>
+                                    <div *ngIf="f.email.errors.pattern">email is invalid</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="sr-only">Password</label>
+                                <input type="password" name="password" id="password" class="form-control"
+                                    placeholder="Enter Password" formControlName="password">
+                                <div *ngIf="f.password.touched && f.password.errors" class="invalid-feedback d-block">
+                                    <div *ngIf="f.password.errors.required">password is required</div>
+                                </div>
+                            </div>
+                            <button name="login" id="login" class="btn btn-block login-btn mb-4" type="submit"
+                                [class.hvr-wobble-to-bottom-right]="loginForm.invalid">Submit</button>
+                        </form>
+                        <a class="forgot-password-link ">Forgot password?</a>
+                        <p class="login-card-footer-text ">Don't have an account? <a class="text-reset ">Register
+                                here</a></p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <img src="assets/images/login.jpg " alt="login" class="login-card-img hvr-wobble-to-bottom-right">
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

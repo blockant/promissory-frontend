@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>Create Listing</h2>
+<mat-dialog-content>
+    <form [formGroup]="listingForm">
+        <div class="form-row">
+            <div class="col-md-12">
+                    <app-auto-complete (setAddress)="getAddress($event)" adressType="geocode">
+                    </app-auto-complete>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="totalPrice">Total Price</label>
+                <input type="text" class="form-control" id="totalPrice" placeholder="Total Price"
+                    formControlName="totalPrice" mask="separator.2" prefix="$" thousandSeparator=","
+                    (input)="onInputChange()">
+            </div>
+            <!-- <div class="form-group col-md-4">
+                <label for="tokenPrice">Token Price</label>
+                <input type="text" class="form-control" id="tokenPrice" placeholder="Token Price"
+                    formControlName="tokenPrice" mask="separator.2" prefix="$" thousandSeparator=",">
+            </div> -->
+            <div class="form-group col-md-4">
+                <label for="rateOfInterest">Rate Of Interest</label>
+                <input type="text" class="form-control" id="rateOfInterest" placeholder="Rate Of Interest"
+                    formControlName="rateOfInterest" mask="separator.2" (input)="onInputChange()">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="interestEarnings">Interest Earnings(Yearly)</label>
+                <input type="text"  class="form-control" id="interestEarnings" placeholder="Interest Earnings"
+                    formControlName="interestEarnings" mask="separator.2" prefix="$" thousandSeparator=",">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="role">Select Owner</label>
+                <select id="role" class="form-control" formControlName="assetOwner">
+                    <option value="">Select Owner</option>
+                    <option [value]="user._id" *ngFor="let user of users">{{user.firstName}} {{user.lastName}}</option>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="role">Standard</label>
+                <select id="role" class="form-control" formControlName="standard">
+                    <option value="">Select Standard</option>
+                    <option [value]="standard" *ngFor="let standard of standards"
+                     [disabled]="standard == 'ERC721'">{{standard}}</option>
+                </select>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="listingForm.getRawValue()"
+        [disabled]="!listingForm.valid">Create</button>
+</mat-dialog-actions>

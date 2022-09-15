@@ -1,0 +1,59 @@
+<div class="p-4">
+    <ngb-accordion #a="ngbAccordion" activeIds="custom-panel-1">
+        <ngb-panel id="custom-panel-1">
+            <ng-template ngbPanelHeader let-opened="opened">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h3 class="m-0 font-weight-bold">My Assets
+                    </h3>
+                </div>
+            </ng-template>
+            <ng-template ngbPanelContent>
+                <ng-container *ngIf="assets && assets.length; else noResult">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Address</th>
+                                <th scope="col">Token Name</th>
+                                <th scope="col">Token Symbol</th>
+                                <th scope="col">Token Supply</th>
+                                <th scope="col">Satus</th>
+                                <th scope="col">Rate Of Interest</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let asset of assets | paginate: { itemsPerPage: 5, currentPage: p }">
+                                <td>{{asset.street}}, {{asset.city}},
+                                    {{asset.state}} {{asset.zipcode}}</td>
+                                <td>{{asset.tokenName}}</td>
+                                <td>{{asset.tokenSymbol}}</td>
+                                <td>{{asset.tokenSupply}}</td>
+                                <td><span class="badge badge-warning font-weight-bold" [ngClass]="{ 
+                                    'badge-secondary':asset.assetStatus == 'pending',
+                                    'badge-success':asset.assetStatus  == 'approved',
+                                    'badge-warning':asset.assetStatus  == 'tokenized'}">{{asset.assetStatus |
+                                        uppercase}}</span></td>
+                                <td> <span class="badge badge-success font-weight-bold">{{asset.rateOfInterest}}%</span>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                        (click)="openDialog(asset)">View
+                                        Investor</button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </ng-container>
+                <div class="text-right" *ngIf="assets && assets.length">
+                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                </div>
+                <ng-template #noResult>
+                    <div class="col text-center">
+                        <h2>No Results Found</h2>
+                    </div>
+                </ng-template>
+            </ng-template>
+        </ngb-panel>
+    </ngb-accordion>
+</div>
