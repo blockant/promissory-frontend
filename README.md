@@ -1,4 +1,4 @@
-# promissory-frontend
+# Promissory-Frontend
 Front End repository for promissory
 
 #Metamask Integartion in Angular
