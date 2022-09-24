@@ -9,6 +9,12 @@
             <li class="nav-item" routerLinkActive="active" [routerLink]="['/listings']">
                 <a class="nav-link" role="button">Listings</a>
             </li>
+            <li class="nav-item" *ngIf="!metaMask.getAccountDetails().isConnected else showAccountDetails">
+                <a class="nav-link" role="button" (click)="metaMask.connectAccount()">Connect To Metamask</a>
+            </li>
+            <ng-template #showAccountDetails>
+                <span class="navbar-text">Account Address: {{metaMask.getAccountDetails().connected_account}}</span>
+            </ng-template>
             <ng-container *ngIf="auth.getCurrentUser()?.user?.role == 'SA'">
                 <li class="nav-item" routerLinkActive="active" [routerLink]="['/user']">
                     <a class="nav-link" role="button">Users</a>

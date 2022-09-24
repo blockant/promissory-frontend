@@ -38,8 +38,8 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
-        this.router.navigate(['/auth/login'])
+    localStorage.clear()
+    this.router.navigate(['/auth/login'])
     this.currentUserSubject.next(null);
   }
 
