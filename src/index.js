@@ -4,7 +4,6 @@ const path = require('path')
 const port = process.env.PORT || 5000
 
 
-// Serve static files....
 app.use(express.static(__dirname + 'client/promissory'));
 
 // Send all requests to index.html

@@ -15,6 +15,7 @@ export class MetamaskService {
 
   constructor() { }
   async connectAccount() {
+    console.log('Hey There')
     console.log('Web3 Object is', window.web3)
     if (window?.ethereum) {
       window.web3 = new Web3(<any>window.ethereum);
