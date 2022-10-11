@@ -132,8 +132,8 @@ router.post('/generateTokens', auth, async (req, res) => {
   var input = {
     language: 'Solidity',
     sources: {
-      'DashTestToken.sol': {
-        content: fs.readFileSync(path.resolve(__dirname, 'contracts', 'DashTestToken.sol'), 'utf8')
+      'Promissory.sol': {
+        content: fs.readFileSync(path.resolve(__dirname, 'contracts', 'Promissory.sol'), 'utf8')
       }
     },
     settings: {
@@ -153,10 +153,10 @@ router.post('/generateTokens', auth, async (req, res) => {
   }
   else {
     const result = await new $web3.eth.Contract(
-      output.contracts["DashTestToken.sol"]['DashTestToken'].abi
+      output.contracts["Promissory.sol"]['Promissory'].abi
     )
       .deploy({
-        data: output.contracts["DashTestToken.sol"]['DashTestToken'].evm.bytecode.object,
+        data: output.contracts["Promissory.sol"]['Promissory'].evm.bytecode.object,
         arguments: [data.tokenName, data.tokenSymbol, data.tokenSupply]
       })
       .send({ gas: '1000000', from: accounts[0] });

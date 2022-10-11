@@ -17,13 +17,13 @@ const fs = require("fs");
 app.post('/contract/deploy', async(req, res)=>{
     try{
       // Reading the file
-        file = fs.readFileSync('./src/routers/contracts/DashTestToken.sol').toString();
+        file = fs.readFileSync('./src/routers/contracts/Promissory.sol').toString();
         //console.log(file);
         // Input structure for solidity compiler
         const input = {
             language: "Solidity",
             sources: {
-            "DashTestToken.sol": {
+            "Promissory.sol": {
                 content: file,
             },
             },
@@ -36,9 +36,9 @@ app.post('/contract/deploy', async(req, res)=>{
             },
         };
         const output = JSON.parse(solc.compile(JSON.stringify(input)));
-        // console.log("Result : ", output);
-        const ABI = output.contracts["DashTestToken.sol"]["DashTestToken"].abi;
-        const bytecode = output.contracts["DashTestToken.sol"]["DashTestToken"].evm.bytecode.object;
+        console.log("Result : ", output);
+        const ABI = output.contracts["Promissory.sol"]["Promissory"].abi;
+        const bytecode = output.contracts["Promissory.sol"]["Promissory"].evm.bytecode.object;
         //console.log("Bytecode: ", bytecode);
         // console.log("ABI: ", ABI);
         const privatePhrase=process.env.PRIVATE_PHRASE
@@ -57,7 +57,7 @@ app.post('/contract/deploy', async(req, res)=>{
         console.log('Using Account', accounts[0])
         const contract = new web3.eth.Contract(ABI);
         //console.log('Contract is', contract)
-        await contract.deploy({ data: bytecode, arguments:['akshay', 't', 123]  }).send({ from: accounts[0].toLowerCase()}).on("receipt", (receipt) => {
+        await contract.deploy({ data: bytecode, arguments:['Promissory', 'PBC', 1000000]  }).send({ from: accounts[0].toLowerCase()}).on("receipt", (receipt) => {
             // Contract Address will be returned here
             console.log("Contract Address:", receipt.contractAddress);
             contractAddress=receipt.contractAddress
