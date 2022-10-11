@@ -11,7 +11,9 @@ app.use(express.static(__dirname + '/client/dist/promissory'));
 app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname + '/client/dist/promissory/index.html'));
 });
-
+process.on('uncaughtException', function (err) {
+  console.log('UNCAUGHT EXCEPTION - keeping process alive:', err); 
+});
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`)
